@@ -1,11 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<meta charset="utf-8">
-<title>菜鸟教程(runoob.com)</title>
+    <meta charset="UTF-8">
+    <title>立方体屏保</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            background-color: #000;
+            perspective: 1500px;
+            overflow: hidden;
+        }
+
+        .cube {
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            transform-style: preserve-3d;
+        }
+
+        .face {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .front {
+            transform: translateZ(150px);
+        }
+
+        .back {
+            transform: rotateY(180deg) translateZ(150px);
+        }
+
+        .right {
+            transform: rotateY(90deg) translateZ(150px);
+        }
+
+        .left {
+            transform: rotateY(-90deg) translateZ(150px);
+        }
+
+        .top {
+            transform: rotateX(90deg) translateZ(150px);
+        }
+
+        .bottom {
+            transform: rotateX(-90deg) translateZ(150px);
+        }
+    </style>
 </head>
+
 <body>
-    <h1>我的第一个标题</h1>
-    <p>我的第一个段落。</p>
+    <!-- 立方体1 -->
+    <div class="cube" id="cube1">
+        <div class="face front"><img src="/114514/aote.png" alt="前面"></div>
+        <div class="face back"><img src="/114514/456.jpg" alt="后面"></div>
+        <div class="face right"><img src="/114514/67c5226a64bc2.jpg" alt="右面"></div>
+        <div class="face left"><img src="/114514/jojo666.png" alt="左面"></div>
+        <div class="face top"><img src="/114514/sb.jpg" alt="上面"></div>
+        <div class="face bottom"><img src="/114514/nailong.png" alt="下面"></div>
+    </div>
+
+    <!-- 立方体2 -->
+    <div class="cube" id="cube2">
+        <div class="face front"><img src="/114514/aote.png" alt="前面"></div>
+        <div class="face back"><img src="/114514/456.jpg" alt="后面"></div>
+        <div class="face right"><img src="/114514/67c5226a64bc2.jpg" alt="右面"></div>
+        <div class="face left"><img src="/114514/jojo666.png" alt="左面"></div>
+        <div class="face top"><img src="/114514/sb.jpg" alt="上面"></div>
+        <div class="face bottom"><img src="/114514/nailong.png" alt="下面"></div>
+    </div>
+
+    <script>
+        // 初始化两个立方体
+        const cubes = [
+            { id: 'cube1', speed: 3.5, rotateSpeedX: 0.8, rotateSpeedY: 0.6, x: 200, y: 200, dirX: 1, dirY: 1, rotateX: 0, rotateY: 0 },
+            { id: 'cube2', speed: 3.0, rotateSpeedX: 0.6, rotateSpeedY: 0.8, x: 500, y: 400, dirX: -1, dirY: 1, rotateX: 0, rotateY: 0 }
+        ];
+
+        cubes.forEach(c => {
+            const cube = document.getElementById(c.id);
+            cube.style.left = `${c.x}px`;
+            cube.style.top = `${c.y}px`;
+            animateCube(c);
+        });
+
+        function animateCube(c) {
+            requestAnimationFrame(() => animateCube(c));
+
+            // 更新位置
+            c.x += c.dirX * c.speed;
+            c.y += c.dirY * c.speed;
+
+            // 边界碰撞检测
+            if (c.x <= 0 || c.x + 300 >= window.innerWidth) c.dirX *= -1;
+            if (c.y <= 0 || c.y + 300 >= window.innerHeight) c.dirY *= -1;
+
+            // 旋转
+            c.rotateX = (c.rotateX + c.rotateSpeedX) % 360;
+            c.rotateY = (c.rotateY + c.rotateSpeedY) % 360;
+
+            // 应用变换
+            const cube = document.getElementById(c.id);
+            cube.style.left = `${c.x}px`;
+            cube.style.top = `${c.y}px`;
+            cube.style.transform = `rotateX(${c.rotateX}deg) rotateY(${c.rotateY}deg)`;
+
+            // 立方体间碰撞检测
+            cubes.forEach(other => {
+                if (c.id !== other.id) {
+                    const rect1 = cube.getBoundingClientRect();
+                    const rect2 = document.getElementById(other.id).getBoundingClientRect();
+                    if (rect1.right > rect2.left &&
+                        rect1.left < rect2.right &&
+                        rect1.bottom > rect2.top &&
+                        rect1.top < rect2.bottom) {
+                        // 碰撞时反转方向
+                        c.dirX *= -1;
+                        c.dirY *= -1;
+                        other.dirX *= -1;
+                        other.dirY *= -1;
+                    }
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>
