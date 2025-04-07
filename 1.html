@@ -3,9 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>立方体屏保</title>
-<head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -66,22 +63,22 @@
 <body>
     <!-- 立方体1 -->
     <div class="cube" id="cube1">
-        <div class="face front"><img src="/114514/aote.png" alt="前面"></div>
-        <div class="face back"><img src="/114514/456.jpg" alt="后面"></div>
-        <div class="face right"><img src="/114514/67c5226a64bc2.jpg" alt="右面"></div>
-        <div class="face left"><img src="/114514/jojo666.png" alt="左面"></div>
-        <div class="face top"><img src="/114514/sb.jpg" alt="上面"></div>
-        <div class="face bottom"><img src="/114514/nailong.png" alt="下面"></div>
+        <div class="face front"><img src="./114514/aote.png" alt="前面"></div>
+        <div class="face back"><img src="./114514/456.jpg" alt="后面"></div>
+        <div class="face right"><img src="./114514/67c5226a64bc2.jpg" alt="右面"></div>
+        <div class="face left"><img src="./114514/jojo666.png" alt="左面"></div>
+        <div class="face top"><img src="./114514/sb.jpg" alt="上面"></div>
+        <div class="face bottom"><img src="./114514/nailong.png" alt="下面"></div>
     </div>
 
     <!-- 立方体2 -->
     <div class="cube" id="cube2">
-        <div class="face front"><img src="/114514/aote.png" alt="前面"></div>
-        <div class="face back"><img src="/114514/456.jpg" alt="后面"></div>
-        <div class="face right"><img src="/114514/67c5226a64bc2.jpg" alt="右面"></div>
-        <div class="face left"><img src="/114514/jojo666.png" alt="左面"></div>
-        <div class="face top"><img src="/114514/sb.jpg" alt="上面"></div>
-        <div class="face bottom"><img src="/114514/nailong.png" alt="下面"></div>
+        <div class="face front"><img src="./114514/aote.png" alt="前面"></div>
+        <div class="face back"><img src="./114514/456.jpg" alt="后面"></div>
+        <div class="face right"><img src="./114514/67c5226a64bc2.jpg" alt="右面"></div>
+        <div class="face left"><img src="./114514/jojo666.png" alt="左面"></div>
+        <div class="face top"><img src="./114514/sb.jpg" alt="上面"></div>
+        <div class="face bottom"><img src="./114514/nailong.png" alt="下面"></div>
     </div>
 
     <script>
@@ -91,6 +88,7 @@
             { id: 'cube2', speed: 3.0, rotateSpeedX: 0.6, rotateSpeedY: 0.8, x: 500, y: 400, dirX: -1, dirY: 1, rotateX: 0, rotateY: 0 }
         ];
 
+        // 为每个立方体设置初始位置并开始动画
         cubes.forEach(c => {
             const cube = document.getElementById(c.id);
             cube.style.left = `${c.x}px`;
@@ -98,6 +96,7 @@
             animateCube(c);
         });
 
+        // 动画函数，使用 requestAnimationFrame 实现平滑动画
         function animateCube(c) {
             requestAnimationFrame(() => animateCube(c));
 
