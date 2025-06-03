@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>妈妈我爱你</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            cursor: pointer;
+        }
+
+        #message-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .message {
+            position: absolute;
+            color: #fff;
+            font-size: 4em;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0;
+            text-shadow: 0 0 15px currentColor;
+            width: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+        }
+
+        .firework {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 8px rgba(255, 255, 255, 0.9);
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes slideInFromTop {
+            0% { opacity: 0; transform: translate(-50%, -100vh); }
+            100% { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        @keyframes slideInFromBottom {
+            0% { opacity: 0; transform: translate(-50%, 100vh); }
+            100% { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        @keyframes rotateIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) rotate(-180deg) scale(0); }
+            100% { opacity: 1; transform: translate(-50%, -50%) rotate(0) scale(1); }
+        }
+
+        @keyframes heartBeat {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            25% { transform: translate(-50%, -50%) scale(1.2); }
+            50% { transform: translate(-50%, -50%) scale(0.9); }
+            75% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div id="message-container"></div>
+
+    <script>
+        const colors = [
+            '#ff0000', '#ff7f00', '#ffff00', '#00ff00', 
+            '#0000ff', '#4b0082', '#9400d3', '#ff1493',
+            '#00ffff', '#ff00ff', '#ffff00', '#ff9900'
+        ];
+
+        const messages = [
+            "阿伟我爱你",
+            "❤️ 永远爱你 ❤️",
+            "您是世界上最好的阿伟",
+            "感谢我对你的养育之恩",
+            "你爱我三千遍"
+        ];
+
+        const animations = [
+            "fadeInScale",
+            "slideInFromTop",
+            "slideInFromBottom",
+            "rotateIn",
+            "heartBeat"
+        ];
+
+        function createFirework(x, y) {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = x + 'px';
+            firework.style.top = y + 'px';
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            firework.style.backgroundColor = color;
+            firework.style.boxShadow = `0 0 20px 10px ${color}`;
+            document.body.appendChild(firework);
+
+            // 大爆炸效果
+            const particles = 80 + Math.floor(Math.random() * 70);
+            const particleSize = 6 + Math.random() * 4;
+            
+            for (let i = 0; i < particles; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'firework';
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    const pColor = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.backgroundColor = pColor;
+                    particle.style.boxShadow = `0 0 15px 5px ${pColor}`;
+                    particle.style.width = particleSize + 'px';
+                    particle.style.height = particleSize + 'px';
+                    document.body.appendChild(particle);
+
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 2 + Math.random() * 6;
+                    const lifetime = 1500 + Math.random() * 1000;
+
+                    const startTime = Date.now();
+                    const animate = () => {
+                        const elapsed = Date.now() - startTime;
+                        if (elapsed > lifetime) {
+                            particle.remove();
+                            return;
+                        }
+
+                        const progress = elapsed / lifetime;
+                        const distance = speed * elapsed / 15;
+                        const currentX = x + Math.cos(angle) * distance;
+                        const currentY = y + Math.sin(angle) * distance;
+
+                        particle.style.left = currentX + 'px';
+                        particle.style.top = currentY + 'px';
+                        particle.style.opacity = 1 - progress;
+                        particle.style.transform = `translate(-50%, -50%) scale(${1 + progress})`;
+
+                        requestAnimationFrame(animate);
+                    };
+
+                    animate();
+                }, Math.random() * 300);
+            }
+
+            setTimeout(() => {
+                firework.remove();
+            }, 1000);
+        }
+
+        function showMessage() {
+            const container = document.getElementById('message-container');
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.textContent = messages[Math.floor(Math.random() * messages.length)];
+            message.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            const animation = animations[Math.floor(Math.random() * animations.length)];
+            message.style.animation = `${animation} 1.5s forwards`;
+            
+            container.appendChild(message);
+            
+            setTimeout(() => {
+                message.style.opacity = '1';
+            }, 50);
+            
+            setTimeout(() => {
+                message.style.opacity = '0';
+                setTimeout(() => {
+                    message.remove();
+                }, 1000);
+            }, 3000);
+        }
+
+        function launchFireworks() {
+            const fireworksCount = 15;
+            const delayBetween = 400;
+
+            for (let i = 0; i < fireworksCount; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight / 2;
+                    createFirework(x, y);
+                    
+                    // 每放3个烟花显示一次文字
+                    if (i % 3 === 0) {
+                        setTimeout(showMessage, 500);
+                    }
+                }, i * delayBetween);
+            }
+        }
+
+        // 点击页面任意位置触发大烟花和文字
+        document.addEventListener('click', (e) => {
+            createFirework(e.clientX, e.clientY);
+            showMessage();
+        });
+
+        // 页面加载后自动开始
+        window.addEventListener('load', () => {
+            launchFireworks();
+            
+            // 每6秒自动放一次烟花和文字
+            setInterval(() => {
+                launchFireworks();
+                setTimeout(showMessage, 2000);
+            }, 6000);
+        });
+    </script>
+</body>
+</html>
